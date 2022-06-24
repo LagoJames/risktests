@@ -1,9 +1,14 @@
-import Jeffreys_test as JT
+import risktests.Jeffreys_test as JT
 import pytest
 import pandas as pd
+import os
 
 def test_JT():
-    df = pd.read_excel('synthetic_pd.xlsx')
+    
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+    test_file = os.path.abspath(os.path.join(BASE_DIR, 'synthetic_pd.xlsx'))
+    df = pd.read_excel(test_file)
+
     output = JT.jeffreys_test(df=df,ratings_col='ratings', PDs_col='prob_default', defaults_col='predicted_flag')
     x = [0.00000, 0.00000, 0.00000, 0.00000, 0.45443, 0.99992, 0.99992, 0.99994, 0.99994, 0.99995, 0.99994, 0.99995, 0.99992, 0.99990, 0.72264]
     assert round(output['P-Value'][0],5) == x[0]

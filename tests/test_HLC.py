@@ -1,4 +1,4 @@
-import Hosmer_Lemeshow_Chi_Square as HLC
+import risktests.Hosmer_Lemeshow_Chi_Square as HLC
 import pytest
 import pandas as pd
 import numpy as np

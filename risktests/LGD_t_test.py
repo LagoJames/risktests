@@ -2,9 +2,6 @@ import numpy as np
 import pandas as pd
 from scipy.stats import t
 
-df = pd.read_excel('synthetic_pd.xlsx')
-
-
 def lgd_t_test(df, observed_LGD_col, expected_LGD_col, verbose=False):
     """t-test for the Null hypothesis that estimated LGD is greater than true LGD
 

@@ -3,8 +3,6 @@ import pandas as pd
 from scipy.stats import t
 
 
-df = pd.read_excel('synthetic_pd.xlsx')
-
 def elbe_t_test(df, LGD_col, ELBE_col, verbose=False):
     """t-test of Null hypothesis that ELBE is equal to realised LGD.
 

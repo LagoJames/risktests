@@ -1,8 +1,6 @@
 import pandas as pd
 from scipy.stats import beta
 
-df = pd.read_excel('synthetic_pd.xlsx')
-
 
 def jeffreys_test(df, ratings_col, PDs_col, defaults_col, alpha=0.05):
     """
@@ -97,7 +95,15 @@ def jeffreys_test(df, ratings_col, PDs_col, defaults_col, alpha=0.05):
         else:
             verdict = 'Fail'
 
-        res = pd.DataFrame({'Rating': [rating], 'PD': [mean_probability], 'N': [n], 'D': [d], 'a': [a], 'b': [b],  'Default Rate': [d/n], 'P-Value': [p_value], 'Pass/Fail': [verdict]})
+        res = pd.DataFrame({'Rating': [rating],
+                            'PD': [mean_probability],
+                            'N': [n],
+                            'D': [d],
+                            'a': [a],
+                            'b': [b],
+                            'Default Rate': [d/n],
+                            'P-Value': [p_value],
+                            'Pass/Fail': [verdict]})
 
         results = results.append(res)
     # Overall
