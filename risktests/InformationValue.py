@@ -70,51 +70,18 @@ def Information_value(df, defaults_col, PDs_col, ratings_col):
         raise ValueError('Missing values in {}'.format(PDs_col))
 
     ratings = df[ratings_col]
-    results = pd.DataFrame({'Rating': [], 'Information Value': []})
-
+    results = pd.DataFrame({'Rating': [], 'IV': []})
     for rating in set(ratings):
         temp = df[df[ratings_col] == rating]
-        tempX = temp[temp[defaults_col] == 0][PDs_col]
-        tempY = temp[temp[defaults_col] == 1][PDs_col]
-        L = min(min(tempX), min(tempY))
-        H = max(max(tempX), max(tempY))
-        bins = np.arange(L, H, 1/10*(H-L))
-        res = pd.cut(tempX, bins=bins)
-        res2 = pd.cut(tempY, bins=bins)
-        n0 = res.value_counts().values
-        n1 = res2.value_counts().values
-        n = len(tempX)
-        m = len(tempY)
-        i_val = 0
-        for j in range(len(n0)):
-            if n0[j] == 0:
-                n0[j] = 0.0001
-            if n1[j] == 1:
-                n1[j] = 0.0001
-            i_val += ((n1[j]/n) - (n0[j]/m))*np.log((n1[j]*m)/(n0[j]*n))
-        res = pd.DataFrame({'Rating': [rating], 'Information Value': [i_val]})
+        tempX = temp[temp[defaults_col] == 0]
+        tempY = temp[temp[defaults_col] == 1]
+        num = len(tempX[defaults_col])/len(df[df[defaults_col] == 0])
+        denom = len(tempY[defaults_col])/len(df[df[defaults_col] == 1])
+        IV = (num - denom)*np.log(num/denom)
+        res = pd.DataFrame({'Rating': [rating], 'IV': [IV]})
         results = pd.concat([results, res])
-    # Overall
-    dfX = df[df[defaults_col] == 0][PDs_col]
-    dfY = df[df[defaults_col] == 1][PDs_col]
-    L = min(min(dfX), min(dfY))
-    H = max(max(dfX), max(dfY))
-    bins = np.arange(L, H, 1/10*(H-L))
-    res = pd.cut(dfX, bins=bins)
-    res2 = pd.cut(dfY, bins=bins)
-    n0 = res.value_counts().values
-    n1 = res2.value_counts().values
-    n = len(dfX)
-    m = len(dfY)
-    i_val = 0
-    for j in range(len(n0)):
-        if n0[j] == 0:
-            n0[j] = 0.0001
-        if n1[j] == 1:
-            n1[j] = 0.0001
-        i_val += ((n1[j]/n) - (n0[j]/m))*np.log((n1[j]*m)/(n0[j]*n))
-
-    overall = pd.DataFrame({'Rating': ['Overall'],
-                            'Information Value': [i_val]})
-    results = pd.concat([results, overall]).set_index('Rating')
+    IV = sum(results['IV'])
+    res = pd.DataFrame({'Rating': ['Overall'], 'IV': [IV]})
+    results = pd.concat([results, res])
+    results = results.set_index('Rating')
     return results

@@ -28,11 +28,7 @@ def lcr(df, LGD_col, EAD_col, pred_LGD_col):
 
     Examples
     --------
-    >>res = Speigelhalter_Normal_test(
-    df=df,
-    EAD_col='ratings',
-    LGD_col='default_flag',
-    pred_LGD_col='prob_default')
+    >>res =  lcr(df=df, LGD_col='LGD', EAD_col='EAD', pred_LGD_col='PRED_LGD')
     >>print(res)
     """
     if df.empty:
@@ -86,11 +82,13 @@ def lcr(df, LGD_col, EAD_col, pred_LGD_col):
     plt.title('Loss Capture Curve')
     plt.plot([i for i in range(len(df2))], df2.cumulative_loss_capture_percentage, 'b', label='Model Output')
     plt.plot([i for i in range(len(df3))], df3.cumulative_loss_capture_percentage, 'g', label='Ideal Output')
-    plt.legend(loc = 'lower right')
-    plt.plot([0, len(df2)], [0, 1],'r--')
+    plt.legend(loc='lower right')
+    plt.plot([0, len(df2)], [0, 1], 'r--')
     plt.xlim([0, len(df2)])
     plt.ylim([0, 1])
     plt.ylabel('Actual Loss Curve(%)')
     plt.xlabel('Ordered Population(Worst to Best)')
     plt.show()
-    return 'loss capture ratio is equal to ' + str(abs(round(loss_capture_ratio, 2)))
+    print('loss capture ratio is equal to ' +
+                str(abs(round(loss_capture_ratio, 2))))
+    return loss_capture_ratio
